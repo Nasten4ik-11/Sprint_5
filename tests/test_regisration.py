@@ -16,47 +16,44 @@ class RegistrationTests(unittest.TestCase):
 
     def test_successful_registration(self):
         """Проверка успешной регистрации"""
-        self.wait.until(EC.element_to_be_clickable(LoginPageLocators.КНОПКА_ВХОД)).click()
-        self.wait.until(EC.element_to_be_clickable(RegistrationPageLocators.КНОПКА_НЕТ_АККАУНТА)).click()
+        self.wait.until(EC.element_to_be_clickable(LoginPageLocators.LOGIN_BUTTON)).click()
+        self.wait.until(EC.element_to_be_clickable(RegistrationPageLocators.NO_ACCOUNT_BUTTON)).click()
 
         email = f"test_{uuid.uuid4().hex[:6]}@example.com"
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_ИМЯ).send_keys("User")
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_EMAIL).send_keys(email)
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_ПАРОЛЬ).send_keys("123456")
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_ПОДТВЕРЖДЕНИЕ_ПАРОЛЯ).send_keys("123456")
+        self.driver.find_element(*RegistrationPageLocators.NAME_FIELD).send_keys("User")
+        self.driver.find_element(*RegistrationPageLocators.EMAIL_FIELD).send_keys(email)
+        self.driver.find_element(*RegistrationPageLocators.PASSWORD_FIELD).send_keys("123456")
+        self.driver.find_element(*RegistrationPageLocators.CONFIRM_PASSWORD_FIELD).send_keys("123456")
 
-        self.driver.find_element(*RegistrationPageLocators.КНОПКА_СОЗДАТЬ_АККАУНТ).click()
+        self.driver.find_element(*RegistrationPageLocators.CREATE_ACCOUNT_BUTTON).click()
 
-        # Проверяем успешность регистрации по появлению кнопки размещения объявления
-        self.wait.until(EC.visibility_of_element_located(MainPageLocators.КНОПКА_РАЗМЕСТИТЬ_ОБЪЯВЛЕНИЕ),
-                       "Регистрация не удалась - кнопка 'Разместить объявление' не найдена")
+        button = self.wait.until(EC.visibility_of_element_located(MainPageLocators.CREATE_AD_BUTTON))
+        self.assertTrue(button.is_displayed(), "Регистрация не удалась - кнопка 'Разместить объявление' не найдена")
 
     def test_invalid_email(self):
         """Проверка некорректного email"""
-        self.wait.until(EC.element_to_be_clickable(LoginPageLocators.КНОПКА_ВХОД)).click()
-        self.wait.until(EC.element_to_be_clickable(RegistrationPageLocators.КНОПКА_НЕТ_АККАУНТА)).click()
+        self.wait.until(EC.element_to_be_clickable(LoginPageLocators.LOGIN_BUTTON)).click()
+        self.wait.until(EC.element_to_be_clickable(RegistrationPageLocators.NO_ACCOUNT_BUTTON)).click()
 
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_EMAIL).send_keys("invalid-email")
-        self.driver.find_element(*RegistrationPageLocators.КНОПКА_СОЗДАТЬ_АККАУНТ).click()
+        self.driver.find_element(*RegistrationPageLocators.EMAIL_FIELD).send_keys("invalid-email")
+        self.driver.find_element(*RegistrationPageLocators.CREATE_ACCOUNT_BUTTON).click()
 
-        error = self.wait.until(EC.visibility_of_element_located(RegistrationPageLocators.СООБЩЕНИЕ_ОШИБКИ),
-                              "Сообщение об ошибке не отображается")
+        error = self.wait.until(EC.visibility_of_element_located(RegistrationPageLocators.ERROR_MESSAGE))
         self.assertTrue(error.is_displayed())
 
     def test_existing_user(self):
         """Проверка существующего пользователя"""
-        self.wait.until(EC.element_to_be_clickable(LoginPageLocators.КНОПКА_ВХОД)).click()
-        self.wait.until(EC.element_to_be_clickable(RegistrationPageLocators.КНОПКА_НЕТ_АККАУНТА)).click()
+        self.wait.until(EC.element_to_be_clickable(LoginPageLocators.LOGIN_BUTTON)).click()
+        self.wait.until(EC.element_to_be_clickable(RegistrationPageLocators.NO_ACCOUNT_BUTTON)).click()
 
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_ИМЯ).send_keys("User")
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_EMAIL).send_keys("existing@example.com")
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_ПАРОЛЬ).send_keys("123456")
-        self.driver.find_element(*RegistrationPageLocators.ПОЛЕ_ПОДТВЕРЖДЕНИЕ_ПАРОЛЯ).send_keys("123456")
+        self.driver.find_element(*RegistrationPageLocators.NAME_FIELD).send_keys("User")
+        self.driver.find_element(*RegistrationPageLocators.EMAIL_FIELD).send_keys("existing@example.com")
+        self.driver.find_element(*RegistrationPageLocators.PASSWORD_FIELD).send_keys("123456")
+        self.driver.find_element(*RegistrationPageLocators.CONFIRM_PASSWORD_FIELD).send_keys("123456")
 
-        self.driver.find_element(*RegistrationPageLocators.КНОПКА_СОЗДАТЬ_АККАУНТ).click()
+        self.driver.find_element(*RegistrationPageLocators.CREATE_ACCOUNT_BUTTON).click()
 
-        error = self.wait.until(EC.visibility_of_element_located(RegistrationPageLocators.СООБЩЕНИЕ_ОШИБКИ),
-                              "Сообщение об ошибке не отображается")
+        error = self.wait.until(EC.visibility_of_element_located(RegistrationPageLocators.ERROR_MESSAGE))
         self.assertTrue(error.is_displayed())
 
 if __name__ == "__main__":

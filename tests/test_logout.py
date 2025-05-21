@@ -20,25 +20,25 @@ class LogoutTests(unittest.TestCase):
         driver.get("https://qa-desk.stand.praktikum-services.ru/")
 
         # Вход
-        wait.until(EC.element_to_be_clickable(LoginPageLocators.КНОПКА_ВХОД)).click()
-        wait.until(EC.visibility_of_element_located(LoginPageLocators.ПОЛЕ_EMAIL)).send_keys("besit@example.com")
-        driver.find_element(*LoginPageLocators.ПОЛЕ_ПАРОЛЬ).send_keys("123456besit")
-        driver.find_element(*LoginPageLocators.КНОПКА_ВОЙТИ).click()
+        wait.until(EC.element_to_be_clickable(LoginPageLocators.LOGIN_BUTTON)).click()
+        wait.until(EC.visibility_of_element_located(LoginPageLocators.EMAIL_FIELD)).send_keys("besit@example.com")
+        driver.find_element(*LoginPageLocators.PASSWORD_FIELD).send_keys("123456besit")
+        driver.find_element(*LoginPageLocators.SUBMIT_BUTTON).click()
 
-        wait.until(EC.visibility_of_element_located(LoginPageLocators.АВАТАР))
+        wait.until(EC.visibility_of_element_located(LoginPageLocators.AVATAR))
 
         # Выход
-        wait.until(EC.element_to_be_clickable(LogoutLocators.КНОПКА_ВЫЙТИ)).click()
+        wait.until(EC.element_to_be_clickable(LogoutLocators.LOGOUT_BUTTON)).click()
 
-        wait.until(EC.invisibility_of_element_located(LoginPageLocators.ИМЯ_ПОЛЬЗОВАТЕЛЯ))
+        wait.until(EC.invisibility_of_element_located(LoginPageLocators.USERNAME))
 
-        avatar_elements = driver.find_elements(*LoginPageLocators.АВАТАР)
-        name_elements = driver.find_elements(*LoginPageLocators.ИМЯ_ПОЛЬЗОВАТЕЛЯ)
+        avatar_elements = driver.find_elements(*LoginPageLocators.AVATAR)
+        name_elements = driver.find_elements(*LoginPageLocators.USERNAME)
 
         self.assertEqual(len(avatar_elements), 0, "Аватар не должен отображаться после выхода")
         self.assertEqual(len(name_elements), 0, "Имя не должно отображаться после выхода")
 
-        login_button = wait.until(EC.visibility_of_element_located(LoginPageLocators.КНОПКА_ВХОД))
+        login_button = wait.until(EC.visibility_of_element_located(LoginPageLocators.LOGIN_BUTTON))
         self.assertTrue(login_button.is_displayed())
 
 if __name__ == "__main__":
