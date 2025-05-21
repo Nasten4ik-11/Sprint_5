@@ -1,0 +1,45 @@
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import unittest
+from locators import LoginPageLocators, LogoutLocators
+
+class LogoutTests(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.wait = WebDriverWait(self.driver, 20)
+
+    def tearDown(self):
+        self.driver.quit()
+
+    def test_logout_user(self):
+        driver = self.driver
+        wait = self.wait
+
+        driver.get("https://qa-desk.stand.praktikum-services.ru/")
+
+        # Вход
+        wait.until(EC.element_to_be_clickable(LoginPageLocators.КНОПКА_ВХОД)).click()
+        wait.until(EC.visibility_of_element_located(LoginPageLocators.ПОЛЕ_EMAIL)).send_keys("besit@example.com")
+        driver.find_element(*LoginPageLocators.ПОЛЕ_ПАРОЛЬ).send_keys("123456besit")
+        driver.find_element(*LoginPageLocators.КНОПКА_ВОЙТИ).click()
+
+        wait.until(EC.visibility_of_element_located(LoginPageLocators.АВАТАР))
+
+        # Выход
+        wait.until(EC.element_to_be_clickable(LogoutLocators.КНОПКА_ВЫЙТИ)).click()
+
+        wait.until(EC.invisibility_of_element_located(LoginPageLocators.ИМЯ_ПОЛЬЗОВАТЕЛЯ))
+
+        avatar_elements = driver.find_elements(*LoginPageLocators.АВАТАР)
+        name_elements = driver.find_elements(*LoginPageLocators.ИМЯ_ПОЛЬЗОВАТЕЛЯ)
+
+        self.assertEqual(len(avatar_elements), 0, "Аватар не должен отображаться после выхода")
+        self.assertEqual(len(name_elements), 0, "Имя не должно отображаться после выхода")
+
+        login_button = wait.until(EC.visibility_of_element_located(LoginPageLocators.КНОПКА_ВХОД))
+        self.assertTrue(login_button.is_displayed())
+
+if __name__ == "__main__":
+    unittest.main()
