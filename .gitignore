@@ -1,0 +1,63 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+coverage.xml
+*.cover
+.hypothesis/
+
+# Python virtualenv
+venv/
+env/
+.venv/
+ENV/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# MyPy
+.mypy_cache/
+
+# Pytest
+.pytest_cache/
+
+# Test reports
+test-results/
+tests/test-results/
+
+# Local config
+*.local
+*.env
+
+# Ignore dotenv if used
+.env
+.env.*
+
+# Ignore pytest config if generated
+pytest.ini
+
+# Ignore compiled test files
+tests/__pycache__/
+
+# MacOS and Windows system files
+.DS_Store
+Thumbs.db
