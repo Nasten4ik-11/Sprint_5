@@ -63,25 +63,20 @@ class CreateListingTests(unittest.TestCase):
         # Переход в профиль
         driver.get("https://qa-desk.stand.praktikum-services.ru/profile")
 
-        # Поиск объявления на всех страницах
-        found = False
-        while not found:
-            ad_titles = wait.until(EC.presence_of_all_elements_located(ProfilePageLocators.AD_TITLE))
-            titles = [title.text.strip() for title in ad_titles]
-            
-            if ad_title in titles:
-                found = True
-                break
-            
-            next_buttons = driver.find_elements(*ProfilePageLocators.NEXT_PAGE_BUTTON)
-            if not next_buttons or 'disabled' in next_buttons[0].get_attribute('class'):
-                break
-                
+        while True:
+            try:
+                next_btn = wait.until(EC.element_to_be_clickable(ProfilePageLocators.NEXT_PAGE_BUTTON))
+                driver.execute_script("arguments[0].scrollIntoView();", next_btn)
+                next_btn.click()
+            except:
+                break  
 
-            next_buttons[0].click()
-            time.sleep(1) 
+        # Проверка наличия нового объявления
+        wait.until(EC.presence_of_element_located(ProfilePageLocators.AD_CARD))
+        ad_titles = driver.find_elements(*ProfilePageLocators.AD_TITLE)
+        titles = [title.text.strip() for title in ad_titles]
 
-        self.assertTrue(found, f"Объявление '{ad_title}' не найдено в профиле")
+        self.assertIn(ad_title, titles, f"Объявление '{ad_title}' не найдено в профиле")
 
 if __name__ == "__main__":
     unittest.main()
